@@ -1,0 +1,31 @@
+.TH GIT-RESTRICT 1 2021-03-31
+.SH NAME
+git-restrict
+.SH SYNOPSIS
+.B git-restrict
+.IR repository0
+.IR repository1 ...
+.PP
+.SH DESCRIPTION
+git-restrict is a minimal utility that allows repository permission
+management based on ssh keys when used in the command directive in
+ssh's authorized_keys format. If used, it will only allow
+.B git-upload-pack
+and
+.B git-receive-pack
+as the commands allowed to be ran by a specific user/SSH key.
+.TP
+.SS Basic usage:
+.Bd -literal
+
+    $ cat ~/.ssh/authorized_keys
+    command="/usr/bin/git-restrict repo0 repo1 repo2" ssh-ed25519 AAA...1 user0@machine
+    command="/usr/bin/git-restrict repo3 repo0" ssh-ed25519 AAA.Z user1@machine
+
+It is also useful to see the
+.B contrib
+directory to see an automation example.
+.SH AUTHORS
+Ivan J. <parazyd@dyne.org>
+.SH LICENSE
+GNU Affero General Public License version 3
