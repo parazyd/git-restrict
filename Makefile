@@ -7,7 +7,7 @@ MANPREFIX = ${PREFIX}/share/man
 # Use system flags
 GR_CFLAGS = $(CFLAGS) -Wall -Werror -pedantic -std=c99
 GR_CPPFLAGS = $(CPPFLAGS) -D_GNU_SOURCE
-GR_LDFLAGS = $(LDFLAGS) -static
+GR_LDFLAGS = $(LDFLAGS) -static -s
 
 BIN = git-restrict
 MAN = $(BIN).1
