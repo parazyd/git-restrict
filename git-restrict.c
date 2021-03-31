@@ -44,6 +44,10 @@ int main(int argc, char *argv[])
 	if (strcmp("git-upload-pack", cmd) && strcmp("git-receive-pack", cmd))
 		die("fatal: Unauthorized command.");
 
+	/* Repository name should at least be: 'a' */
+	if (repo == NULL || (strlen(repo) < 3))
+		die("fatal: Invalid repository name.");
+
 	/* Remove ' prefix and suffix */
 	repo++;
 	repo[strlen(repo) - 1] = 0;
