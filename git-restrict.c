@@ -70,7 +70,7 @@ int main(int argc, char *argv[])
 	}
 
 	if (authorized)
-		if (execlp("git-shell", " ", "-c", orig_cmd, (char *)NULL) < 0) {
+		if (execlp("git-shell", "git-shell", "-c", orig_cmd, (char *)NULL) < 0) {
 			perror("execlp");
 			return 1;
 		}
