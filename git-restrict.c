@@ -49,8 +49,12 @@ int main(int argc, char *argv[])
 	repo[strlen(repo) - 1] = 0;
 
 	for (i = 1; i < argc; i++) {
-		buf = malloc(strlen(repo) + 4);
-		sprintf(buf, "%s.git", argv[i]);
+		if ((buf = malloc(strlen(repo) + 4)) == NULL) {
+			perror("malloc");
+			return 1;
+		}
+
+		snprintf(buf, strlen(repo) + 4, "%s.git", argv[i]);
 
 		if (!strcmp(argv[i], repo) || !strcmp(buf, repo)) {
 			authorized = 1;
