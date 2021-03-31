@@ -14,36 +14,35 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+
+static void die(const char *msg)
+{
+	fprintf(stderr, "%s\n", msg);
+	exit(1);
+}
 
 int main(int argc, char *argv[])
 {
 	char *orig_cmd, *cmd, *repo, *buf;
 	int i, authorized = 0;
 
-	if (argc < 2) {
-		fprintf(stderr, "usage: git-restrict repo0 repo1 ...\n");
-		return 1;
-	}
+	if (argc < 2)
+		die("usage: git-restrict repo0 repo1 ...");
 
-	if ((orig_cmd = getenv("SSH_ORIGINAL_COMMAND")) == NULL) {
-		fprintf(stderr, "fatal: No $SSH_ORIGINAL_COMMAND in env.\n");
-		return 1;
-	}
+	if ((orig_cmd = getenv("SSH_ORIGINAL_COMMAND")) == NULL)
+		die("fatal: No $SSH_ORIGINAL_COMMAND in env.");
 
 	repo = strdup(orig_cmd);
 
 	if ((cmd = strsep(&repo, " ")) == NULL)
-		return 1;
+		die("fatal: Invalid command.");
 
-	if (strcmp("git-upload-pack", cmd) && strcmp("git-receive-pack", cmd)) {
-		fprintf(stderr, "fatal: Unauthorized command.\n");
-		return 1;
-	}
+	if (strcmp("git-upload-pack", cmd) && strcmp("git-receive-pack", cmd))
+		die("fatal: Unauthorized command.");
 
 	/* Remove ' prefix and suffix */
 	repo++; repo[strlen(repo)-1] = 0;
@@ -65,6 +64,6 @@ int main(int argc, char *argv[])
 		if (execlp("git-shell", " ", "-c", orig_cmd, (char *)NULL) < 0)
 			perror("execlp");
 
-	fprintf(stderr, "fatal: Access to repository denied.\n");
+	die("fatal: Access to repository denied.");
 	return 1;
 }
