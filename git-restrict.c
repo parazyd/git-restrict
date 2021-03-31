@@ -45,10 +45,11 @@ int main(int argc, char *argv[])
 		die("fatal: Unauthorized command.");
 
 	/* Remove ' prefix and suffix */
-	repo++; repo[strlen(repo)-1] = 0;
+	repo++;
+	repo[strlen(repo) - 1] = 0;
 
 	for (i = 1; i < argc; i++) {
-		buf = malloc(strlen(repo)+4);
+		buf = malloc(strlen(repo) + 4);
 		sprintf(buf, "%s.git", argv[i]);
 
 		if (!strcmp(argv[i], repo) || !strcmp(buf, repo)) {
