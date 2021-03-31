@@ -69,12 +69,11 @@ int main(int argc, char *argv[])
 		free(buf);
 	}
 
-	if (authorized)
-		if (execlp("git-shell", "git-shell", "-c", orig_cmd, (char *)NULL) < 0) {
-			perror("execlp");
-			return 1;
-		}
+	if (!authorized)
+		die("fatal: Access to repository denied.");
 
-	die("fatal: Access to repository denied.");
+	if (execlp("git-shell", "git-shell", "-c", orig_cmd, (char *)NULL) < 0)
+		perror("execlp");
+
 	return 1;
 }
