@@ -22,7 +22,7 @@
 
 int main(int argc, char *argv[])
 {
-	char *orig_cmd, *cmd, *repo;
+	char *orig_cmd, *cmd, *repo, *buf;
 	int i, authorized = 0;
 
 	if (argc < 2) {
@@ -49,10 +49,16 @@ int main(int argc, char *argv[])
 	repo++; repo[strlen(repo)-1] = 0;
 
 	for (i = 1; i < argc; i++) {
-		if (!strcmp(argv[i], repo)) {
+		buf = malloc(strlen(repo)+4);
+		sprintf(buf, "%s.git", argv[i]);
+
+		if (!strcmp(argv[i], repo) || !strcmp(buf, repo)) {
 			authorized = 1;
+			free(buf);
 			break;
 		}
+
+		free(buf);
 	}
 
 	if (authorized)
