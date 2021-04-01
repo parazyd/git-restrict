@@ -35,4 +35,7 @@ uninstall:
 	rm -f $(DESTDIR)$(PREFIX)/bin/$(BIN)
 	rm -f $(DESTDIR)$(MANPREFIX)/man1/$(MAN)
 
-.PHONY: all clean install uninstall
+test: all
+	@./test.sh
+
+.PHONY: all clean install uninstall test
