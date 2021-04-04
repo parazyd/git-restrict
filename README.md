@@ -1,6 +1,8 @@
 git-restrict
 ============
 
+![Build Status](https://github.com/parazyd/git-restrict/actions/workflows/c-cpp.yml/badge.svg)
+
 A minimal utility that allows repository permission management based on
 ssh keys when used with the command directive in ssh's authorized_keys
 file.
