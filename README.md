@@ -17,6 +17,12 @@ in chroot environments. This is obviously intentional.
 Basic usage
 -----------
 
+Set up SSH and a `git` user on a host machine that will serve the git
+repositories. Ideally the repos should be stored in the user's `$HOME`.
+
+After this, compile and install git-restrict and use something like
+the following to set repo permissions for specific SSH keys:
+
 ```
 $ cat ~/.ssh/authorized_keys
 command="/usr/bin/git-restrict repo0 repo1 repo2" ssh-ed25519 AAA...1 user0@machine
