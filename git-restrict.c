@@ -53,6 +53,7 @@ int main(int argc, char *argv[])
 	repo[strlen(repo) - 1] = 0;
 
 	for (i = 1; i < argc; i++) {
+		/* This is so both "foo" and "foo.git" are supported */
 		if ((buf = malloc(strlen(repo) + 4)) == NULL) {
 			perror("malloc");
 			return 1;
@@ -72,7 +73,7 @@ int main(int argc, char *argv[])
 	if (!authorized)
 		die("fatal: Access to repository denied.");
 
-	if (execlp("git-shell", "git-shell", "-c", orig_cmd, (char *)NULL) < 0)
+	if (execlp("git-shell", "git-shell", "-c", orig_cmd, (char *)NULL) == -1)
 		perror("execlp");
 
 	return 1;
