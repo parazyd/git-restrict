@@ -4,7 +4,16 @@ misc="no-port-forwarding,no-X11-forwarding,no-agent-forwarding,no-pty"
 
 gen_for_keys() {
 	while read -r key; do
-		printf "command=\"/usr/bin/git-restrict %s\",%s %s\n" "$@" "$misc" "$key"
+		if echo "$key" | grep -q '#'; then
+			continue
+		fi
+
+		if [ -z "$key" ]; then
+			continue
+		fi
+
+		printf 'command="/usr/local/bin/git-restrict %s",%s %s\n' \
+			"$@" "$misc" "$key"
 	done
 }
 
