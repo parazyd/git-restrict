@@ -10,8 +10,8 @@ file.
 If used, it will only allow `git-upload-pack` and `git-receive-pack` as
 the commands allowed to be ran by a specific user/SSH key.
 
-git-restrict is also compiled as a static binary so it's easy to use it
-in chroot environments. This is obviously intentional.
+git-restrict is C99 portable and compiled as a static binary so it's
+easy to use it in chroot environments. This is obviously intentional.
 
 
 Basic usage

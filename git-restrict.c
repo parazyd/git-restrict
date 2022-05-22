@@ -1,4 +1,4 @@
-/* Copyright (c) 2021 Ivan J. <parazyd@dyne.org>
+/* Copyright (c) 2021-2022 Ivan J. <parazyd@dyne.org>
  *
  * This file is part of git-restrict
  *
@@ -14,7 +14,6 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-#include <limits.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -26,10 +25,18 @@ static void die(const char *msg)
 	exit(1);
 }
 
+static char *strdup(const char *s)
+{
+	size_t l = strlen(s);
+	char *d = malloc(l+1);
+	if (!d) return NULL;
+	return memcpy(d, s, l+1);
+}
+
 int main(int argc, char *argv[])
 {
 	char *orig_cmd, *cmd, *repo, *buf;
-	char git_cmd[PATH_MAX];
+	char git_cmd[4096];
 	int i, authorized = 0;
 
 	if (argc < 2)
@@ -38,10 +45,9 @@ int main(int argc, char *argv[])
 	if ((orig_cmd = getenv("SSH_ORIGINAL_COMMAND")) == NULL)
 		die("fatal: No $SSH_ORIGINAL_COMMAND in env.");
 
-	repo = strdup(orig_cmd);
-
-	if ((cmd = strsep(&repo, " ")) == NULL)
-		die("fatal: Invalid command.");
+	if ((repo = strdup(orig_cmd)) == NULL) die("fatal: Internal error.");
+	if ((cmd = strtok(repo, " ")) == NULL) die("fatal: Invalid command.");
+	repo = strtok(NULL, " ");
 
 	if (strcmp("git-upload-pack", cmd) && strcmp("git-receive-pack", cmd))
 		die("fatal: Unauthorized command.");
@@ -51,9 +57,7 @@ int main(int argc, char *argv[])
 		die("fatal: Invalid repository name.");
 
 	/* Remove ' and / prefix and ' suffix */
-	repo++;
-	if (repo[0] == '/') repo++;
-	repo[strlen(repo) - 1] = 0;
+	repo++; if (repo[0] == '/') repo++; repo[strlen(repo) - 1] = 0;
 
 	for (i = 1; i < argc; i++) {
 		/* This is so both "foo" and "foo.git" are supported */

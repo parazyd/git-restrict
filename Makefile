@@ -5,8 +5,7 @@ PREFIX = /usr/local
 MANPREFIX = ${PREFIX}/share/man
 
 # Use system flags
-GR_CFLAGS = $(CFLAGS) -Wall -Werror -pedantic -std=c99
-GR_CPPFLAGS = $(CPPFLAGS) -D_GNU_SOURCE
+GR_CFLAGS = $(CFLAGS) -Wall -Wextra -Werror -pedantic -std=c99
 GR_LDFLAGS = $(LDFLAGS) -static -s
 
 BIN = git-restrict
@@ -16,7 +15,7 @@ OBJ = $(BIN:=.o)
 all: $(BIN)
 
 .c.o:
-	$(CC) -c $(GR_CFLAGS) $(GR_CPPFLAGS) $<
+	$(CC) -c $(GR_CFLAGS) $<
 
 $(BIN): $(OBJ)
 	$(CC) $(OBJ) $(GR_LDFLAGS) -o $@
