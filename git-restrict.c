@@ -27,10 +27,10 @@ static void die(const char *msg)
 
 static char *strdup(const char *s)
 {
-	size_t l = strlen(s);
-	char *d = malloc(l+1);
+	size_t sz = strlen(s)+1;
+	char *d = malloc(sz);
 	if (!d) return NULL;
-	return memcpy(d, s, l+1);
+	return memcpy(d, s, sz);
 }
 
 int main(int argc, char *argv[])
