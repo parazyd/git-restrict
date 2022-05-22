@@ -36,7 +36,7 @@ static char *strdup(const char *s)
 int main(int argc, char *argv[])
 {
 	char *orig_cmd, *cmd, *repo, *buf;
-	char git_cmd[4096];
+	char git_cmd[20 + 256];
 	int i, authorized = 0;
 
 	if (argc < 2)
