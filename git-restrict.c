@@ -14,6 +14,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+#include <limits.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -28,6 +29,7 @@ static void die(const char *msg)
 int main(int argc, char *argv[])
 {
 	char *orig_cmd, *cmd, *repo, *buf;
+	char git_cmd[PATH_MAX];
 	int i, authorized = 0;
 
 	if (argc < 2)
@@ -48,8 +50,9 @@ int main(int argc, char *argv[])
 	if (repo == NULL || (strlen(repo) < 3))
 		die("fatal: Invalid repository name.");
 
-	/* Remove ' prefix and suffix */
+	/* Remove ' and / prefix and ' suffix */
 	repo++;
+	if (repo[0] == '/') repo++;
 	repo[strlen(repo) - 1] = 0;
 
 	for (i = 1; i < argc; i++) {
@@ -73,7 +76,9 @@ int main(int argc, char *argv[])
 	if (!authorized)
 		die("fatal: Access to repository denied.");
 
-	if (execlp("git-shell", "git-shell", "-c", orig_cmd, (char *)NULL) == -1)
+	snprintf(git_cmd, strlen(cmd) + strlen(repo) + 4, "%s '%s'", cmd, repo);
+
+	if (execlp("git-shell", "git-shell", "-c", git_cmd, (char *)NULL) == -1)
 		perror("execlp");
 
 	return 1;
